@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import * as Animatable from "react-native-animatable"
+import api from "../../services/api"
 
 import {
   Text,
@@ -7,13 +8,30 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  ImageBackground
+  ImageBackground,
 } from 'react-native'
+
 
 import Backgound from "../../assets/backgound.png"
 
 export default function SignIn() {
 
+  const [email, setEmail] = useState('');
+  const [passWord, setPassWord] = useState('');
+
+  function access(){
+    api.post('/api/signIn/',{
+      email: email,
+      password: passWord
+    }).then(
+      (response) =>{
+        console.log(response)
+      }
+    ).catch((response) =>{
+      console.log(response)
+    })
+  }
+  
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground source={Backgound} style={styles.imageBackground}>
@@ -34,17 +52,23 @@ export default function SignIn() {
             <TextInput style={styles.input}
             placeholder='Digite um E-mail'
             placeholderTextColor="#404460"
+            value = {email}
+            onChangeText={setEmail}
+            keyboardType = "email-address"
             />
             
             <Text style={styles.title}>Senha:</Text>
             <TextInput style={styles.input}
               placeholder='Senha'
+              value = {passWord}
               placeholderTextColor="#404460"
+              onChangeText={setPassWord}
+              secureTextEntry={true}
             />
 
             <TouchableOpacity
             style={styles.button}
-            onPress={()=>{}}
+            onPress={access}
             >
               <Text style={styles.buttonText}>Acessar</Text>
             </TouchableOpacity>
